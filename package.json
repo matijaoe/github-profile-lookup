@@ -1,0 +1,12 @@
+{
+  "name": "github-profile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "watch:sass": "node-sass sass/main.scss css/style.css -w"
+  },
+  "keywords": [],
+  "author": "Matija Osrecki",
+  "license": "ISC"
+}

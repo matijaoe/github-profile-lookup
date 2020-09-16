@@ -1,0 +1,153 @@
+:root {
+	--ff: 'DM Sans', sans-serif;
+
+	// COLORS
+	--purple-1: hsl(255, 47%, 31%);
+
+	--purple-2: hsl(246, 45%, 28%);
+	--purple-2-lighter: hsl(246, 45%, 34%);
+
+	--purple-3: hsl(244, 42%, 29%);
+	--pink-1: #ec1972;
+	--gray-1: #c3c0d5;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+html {
+	box-sizing: border-box;
+	font-size: 62.5%;
+}
+
+input,
+button,
+textarea {
+	font: inherit;
+}
+
+body {
+	font-size: 1.6rem;
+	font-family: var(--ff);
+	background: var(--purple-2);
+
+	display: grid;
+	place-items: center;
+	min-height: 100vh;
+	color: white;
+	padding: 1.6rem;
+}
+
+.header {
+	position: absolute;
+	top: 1.6rem;
+	left: 0;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+
+	&__searchbar {
+		max-width: 40rem;
+		width: 100%;
+		padding: 0.75em;
+		text-align: center;
+		background: rgba(255, 255, 255, 0.04);
+		border: none;
+		border-radius: 18px;
+		color: white;
+		transition: all 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+		&:focus {
+			background: rgba(255, 255, 255, 0.07);
+			max-width: 80rem;
+		}
+	}
+}
+
+.profile {
+	background: var(--purple-1);
+	max-width: 75rem;
+	width: 100%;
+	border-radius: 18px;
+	padding: 3.6rem 5.8rem;
+	// display: grid;
+	// grid-template-columns: 18rem 1fr;
+	// gap: 3.2rem;
+	display: flex;
+
+	&__photo {
+		max-width: 22rem;
+		margin-right: 4.8rem;
+
+		img {
+			display: block;
+			max-width: calc(100% - 2.2rem * 2);
+			border-radius: 50%;
+			margin: 2.2rem;
+			box-shadow: 0 0 0 1.2em var(--purple-2);
+		}
+	}
+
+	&__description {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		transform: translateY(-5px);
+	}
+
+	&__name {
+		> * {
+			display: block;
+		}
+
+		&--full {
+			font-weight: 700;
+			font-size: 2.4rem;
+		}
+
+		&--username {
+			opacity: 0.6;
+			margin-top: 0.3em;
+		}
+	}
+
+	&__bio {
+		position: relative;
+		padding-left: 1em;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 4px;
+			background: rgba(255, 255, 255, 0.15);
+			height: 102%;
+			border-radius: 100rem;
+		}
+	}
+
+	&__stats {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		&--label {
+			opacity: 0.7;
+		}
+
+		&--count {
+			font-weight: 700;
+			opacity: 1;
+		}
+	}
+}
