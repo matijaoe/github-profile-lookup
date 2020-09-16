@@ -118,11 +118,9 @@ formEl.addEventListener('submit', async (e) => {
     await getUser(searchbar.value.trim());
     searchbar.value = '';
 })
-getUser('IvanaAndersson');
+getUser('egoist');
 
 // followersEl.addEventListener('click', listener)
-
-
 
 const isoCountries = {
     'Afghanistan': 'AF',
@@ -356,7 +354,10 @@ const isoCountries = {
     'Ukraine': 'UA',
     'United Arab Emirates': 'AE',
     'United Kingdom': 'GB',
+    'UK': 'GB',
     'United States': 'US',
+    'US': 'US',
+    'USA': 'US',
     'United States Outlying Islands': 'UM',
     'Uruguay': 'UY',
     'Uzbekistan': 'UZ',
