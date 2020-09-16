@@ -115,7 +115,7 @@ function displayUser(user) {
 
 formEl.addEventListener('submit', async (e) => {
     e.preventDefault();
-    await getUser(searchbar.value);
+    await getUser(searchbar.value.trim());
     searchbar.value = '';
 })
 getUser('IvanaAndersson');
