@@ -9,25 +9,63 @@ const searchbar = document.querySelector('.header__searchbar');
 // const blogEl = document.querySelector('.profile__blog-link');
 // const blogIcon = document.querySelector('#blog-icon');
 // const bioEl = document.querySelector('.profile__bio');
-// const followersEl = document.querySelector('.profile__stats--followers .profile__stats--count')
-// const followingEl = document.querySelector('.profile__stats--following .profile__stats--count')
-// const reposEl = document.querySelector('.profile__stats--repos  .profile__stats--count')
 
 async function getUser(user = 'egoist') {
     const { data } = await axios.get(`https://api.github.com/users/${user}`)
     displayUser(data);
     getRepos(data.repos_url);
+    document.querySelector('.profile__stat--repos').classList.add('active');
+
+    const statsEl = document.querySelectorAll('.profile__stat');
+    statsEl.forEach(stat => {
+        stat.addEventListener('click', () => {
+            // remove all other active classes
+            statsEl.forEach(stat => stat.classList.remove('active'));
+            stat.classList.add('active');
+
+            if (stat.classList.contains('profile__stat--followers')) {
+                getUsers(data.followers_url);
+            } else if (stat.classList.contains('profile__stat--following')) {
+                getUsers(`https://api.github.com/users/${data.login}/following`);
+            } else if (stat.classList.contains('profile__stat--repos')) {
+                getRepos(data.repos_url);
+            }
+        })
+    })
 };
+
+async function getUsers(url) {
+    const { data: users } = await axios.get(`${url}`);
+    console.log(users);
+    addUsersToCard(users);
+}
 
 async function getRepos(url) {
     const { data: repos } = await axios.get(`${url}?per_page=100`);
-
     addReposToCard(repos);
 }
 
+function addUsersToCard(users) {
+    const targetEl = document.getElementById("target");
+    targetEl.innerHTML = '';
+
+    users
+        .slice(0, 15)
+        .forEach(user => {
+            const userEl = document.createElement('a');
+            userEl.innerText = user.login;
+            userEl.classList.add('profile__target-element');
+            userEl.href = user.html_url;
+            userEl.target = '_blank'
+            targetEl.append(userEl);
+        });
+
+}
+
+
 function addReposToCard(repos) {
-    console.log(repos);
-    const reposEl = document.getElementById("target");
+    const targetEl = document.getElementById("target");
+    targetEl.innerHTML = '';
 
     repos
         .sort((a, b) => b.stargazers_count - a.stargazers_count)
@@ -39,12 +77,11 @@ function addReposToCard(repos) {
             repoEl.classList.add('profile__target-element');
             repoEl.href = repo.html_url;
             repoEl.target = '_blank'
-            reposEl.append(repoEl);
-        })
-
+            targetEl.append(repoEl);
+        });
 }
 
-function displayUser(user) { 
+function displayUser(user) {
     const {
         login,
         id,
@@ -147,15 +184,15 @@ function displayUser(user) {
                     <ul class="profile__stats">
                         <li class="profile__stat profile__stat--followers">
                             <span class="profile__stat--count">${followers.toLocaleString()}</span>
-                            <label class="profile__stat--label">Followers</label>
+                            <span class="profile__stat--label">Followers</span>
                         </li>
                         <li class="profile__stat profile__stat--following">
                             <span class="profile__stat--count">${following.toLocaleString()}</span>
-                            <label class="profile__stat--label">Following</label>
+                            <span class="profile__stat--label">Following</span>
                         </li>
-                        <li class="profile__stat profile__stat--repos active">
+                        <li class="profile__stat profile__stat--repos">
                             <span class="profile__stat--count">${public_repos.toLocaleString()}</span>
-                            <label class="profile__stat--label">Repos</label>
+                            <span class="profile__stat--label">Repos</span>
                         </li>
                     </ul>
                 </div>
@@ -178,7 +215,7 @@ formEl.addEventListener('submit', async (e) => {
         searchbar.blur();
     }
 })
-// getUser('egoist');
+getUser('egoist');
 
 // followersEl.addEventListener('click', () => {})
 

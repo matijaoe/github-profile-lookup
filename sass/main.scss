@@ -222,11 +222,35 @@ body {
 	}
 
 	&__stat {
-		display: block;
+		display: inline-block;
+		cursor: pointer;
+		@extend .bubble--big;
+		transition: all 400ms ease;
+		position: relative;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			@extend .bubble--big;
+			z-index: -1;
+			border: 3px solid var(--purple-2);
+			transition: all 200ms ease;
+			opacity: 0;
+		}
 
 		&.active {
-			@extend .bubble;
+			background: var(--purple-2);
+			border-radius: 18px;
 		}
+
+		&:hover::before {
+			opacity: 1;
+		}
+
 		&--label {
 			opacity: 0.7;
 		}
@@ -251,7 +275,7 @@ body {
 	}
 
 	&__target-element {
-		@extend .bubble;
+		@extend .bubble--small;
 		padding: 0.3em 0.75em;
 		background: var(--purple-2);
 		font-size: 0.85em;
@@ -270,7 +294,14 @@ body {
 }
 
 .bubble {
-	padding: 0.35em 0.75em;
-	background: var(--purple-2);
 	border-radius: 18px;
+}
+.bubble--big {
+	@extend .bubble;
+	padding: 0.4em 0.9em;
+}
+
+.bubble--small {
+	@extend .bubble;
+	padding: 0.35em 0.75em;
 }

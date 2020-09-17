@@ -149,7 +149,26 @@ body {
     align-items: center;
     justify-content: space-between; }
   .profile__stat {
-    display: block; }
+    display: inline-block;
+    cursor: pointer;
+    transition: all 400ms ease;
+    position: relative; }
+    .profile__stat::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      border: 3px solid var(--purple-2);
+      transition: all 200ms ease;
+      opacity: 0; }
+    .profile__stat.active {
+      background: var(--purple-2);
+      border-radius: 18px; }
+    .profile__stat:hover::before {
+      opacity: 1; }
     .profile__stat--label {
       opacity: 0.7; }
     .profile__stat--count {
@@ -174,7 +193,11 @@ body {
 .hide {
   display: none; }
 
-.bubble, .profile__stat.active, .profile__target-element {
-  padding: 0.35em 0.75em;
-  background: var(--purple-2);
+.bubble, .bubble--big, .profile__stat, .profile__stat::before, .bubble--small, .profile__target-element {
   border-radius: 18px; }
+
+.bubble--big, .profile__stat, .profile__stat::before {
+  padding: 0.4em 0.9em; }
+
+.bubble--small, .profile__target-element {
+  padding: 0.35em 0.75em; }
