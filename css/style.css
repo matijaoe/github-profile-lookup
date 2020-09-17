@@ -68,7 +68,8 @@ body {
 
 .main {
   max-width: 80rem;
-  width: 100%; }
+  width: 100%;
+  max-height: 600px; }
 
 .profile {
   background: var(--purple-1);
@@ -76,7 +77,9 @@ body {
   padding: 3.6rem 5.8rem;
   overflow: hidden;
   box-shadow: 20px 20px 70px var(--purple-2-shadow-dark), -20px -20px 70px var(--purple-2-shadow-light);
-  transition: all 1000ms; }
+  transition: all 1000ms;
+  display: grid;
+  row-gap: 2em; }
   .profile__grid {
     display: flex; }
   .profile__photo {
@@ -177,7 +180,7 @@ body {
   .profile__target {
     position: relative;
     z-index: 10;
-    margin-top: 2em; }
+    text-align: center; }
     .profile__target:hover > .profile__target-element {
       opacity: 0.6; }
     .profile__target:hover > .profile__target-element:hover {
@@ -188,7 +191,8 @@ body {
     font-size: 0.85em;
     display: inline-block;
     margin-right: 0.5rem;
-    margin-bottom: 0.5rem; }
+    margin-bottom: 0.5rem;
+    cursor: pointer; }
 
 .hide {
   display: none; }

@@ -2,41 +2,46 @@
 const formEl = document.querySelector('form');
 const main = document.querySelector('#main');
 const searchbar = document.querySelector('.header__searchbar');
-// const avatarEl = document.querySelector('.profile__photo img');
-// const nameEl = document.querySelector('.profile__name--full');
-// const usernameEl = document.querySelector('.profile__name--username');
-// const flagEl = document.querySelector('.profile__flag');
-// const blogEl = document.querySelector('.profile__blog-link');
-// const blogIcon = document.querySelector('#blog-icon');
-// const bioEl = document.querySelector('.profile__bio');
 
 async function getUser(user = 'egoist') {
     const { data } = await axios.get(`https://api.github.com/users/${user}`)
     displayUser(data);
+    showMoreInfo(data);
+};
+
+function showMoreInfo(data) {
+    const statsEl = document.querySelectorAll('.profile__stat');
+
     getRepos(data.repos_url);
     document.querySelector('.profile__stat--repos').classList.add('active');
 
-    const statsEl = document.querySelectorAll('.profile__stat');
-    statsEl.forEach(stat => {
-        stat.addEventListener('click', () => {
-            // remove all other active classes
+    statsEl.forEach((stat) => {
+        stat.addEventListener('click', async () => {
+            // remove all active classes
             statsEl.forEach(stat => stat.classList.remove('active'));
             stat.classList.add('active');
 
             if (stat.classList.contains('profile__stat--followers')) {
-                getUsers(data.followers_url);
+                await getUsers(data.followers_url);
+                const users = document.querySelectorAll('.profile__target-element');
+                users.forEach((user) => {
+                    user.addEventListener('click', () => getUser(user.innerText))
+                })
             } else if (stat.classList.contains('profile__stat--following')) {
-                getUsers(`https://api.github.com/users/${data.login}/following`);
+                await getUsers(`https://api.github.com/users/${data.login}/following`);
+                const users = document.querySelectorAll('.profile__target-element');
+                users.forEach((user) => {
+                    user.addEventListener('click', () => getUser(user.innerText))
+                })
             } else if (stat.classList.contains('profile__stat--repos')) {
-                getRepos(data.repos_url);
+                await getRepos(data.repos_url);
             }
         })
     })
-};
+}
 
 async function getUsers(url) {
     const { data: users } = await axios.get(`${url}`);
-    console.log(users);
     addUsersToCard(users);
 }
 
@@ -50,16 +55,15 @@ function addUsersToCard(users) {
     targetEl.innerHTML = '';
 
     users
-        .slice(0, 15)
+        .slice(0, 14)
         .forEach(user => {
             const userEl = document.createElement('a');
             userEl.innerText = user.login;
             userEl.classList.add('profile__target-element');
-            userEl.href = user.html_url;
+            // userEl.href = user.html_url;
             userEl.target = '_blank'
             targetEl.append(userEl);
         });
-
 }
 
 
@@ -119,6 +123,7 @@ function displayUser(user) {
     console.log(user);
 
     // console.log('BLOG:', blog);
+    // todo remove blog icon
     let blogName = blog;
     let blogLink = blog;
     if (blog) {
@@ -215,9 +220,6 @@ formEl.addEventListener('submit', async (e) => {
         searchbar.blur();
     }
 })
-getUser('egoist');
-
-// followersEl.addEventListener('click', () => {})
 
 const isoCountries = {
     'Afghanistan': 'AF',
