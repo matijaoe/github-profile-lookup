@@ -16,9 +16,35 @@ const searchbar = document.querySelector('.header__searchbar');
 async function getUser(user = 'egoist') {
     const { data } = await axios.get(`https://api.github.com/users/${user}`)
     displayUser(data);
+    getRepos(data.repos_url);
 };
 
-function displayUser(user) {
+async function getRepos(url) {
+    const { data: repos } = await axios.get(`${url}?per_page=100`);
+
+    addReposToCard(repos);
+}
+
+function addReposToCard(repos) {
+    console.log(repos);
+    const reposEl = document.getElementById("target");
+
+    repos
+        .sort((a, b) => b.stargazers_count - a.stargazers_count)
+        .sort((a, b) => b.watchers_count - a.watchers_count)
+        .slice(0, 10)
+        .forEach(repo => {
+            const repoEl = document.createElement('a');
+            repoEl.innerText = repo.name;
+            repoEl.classList.add('profile__target-element');
+            repoEl.href = repo.html_url;
+            repoEl.target = '_blank'
+            reposEl.append(repoEl);
+        })
+
+}
+
+function displayUser(user) { 
     const {
         login,
         id,
@@ -55,17 +81,16 @@ function displayUser(user) {
     } = user;
     console.log(user);
 
-    console.log('BLOG:', blog);
-    let blogCopy = blog;
+    // console.log('BLOG:', blog);
+    let blogName = blog;
     let blogLink = blog;
     if (blog) {
+        // make link usable
         if (!(/http[s]?/).test(blog)) {
             blogLink = 'https://' + blog;
-        } 
-        blogCopy = blogCopy.replace(/^https?\:\/\//i, "");
-
-    } else {
-
+        }
+        // show prettier link
+        blogName = blogName.replace(/^https?\:\/\//i, "");
     }
 
     let flagUrl = '';
@@ -84,21 +109,13 @@ function displayUser(user) {
 
                 const countryCode = isoCountries[loc]
                 flagUrl = `https://hatscripts.github.io/circle-flags/flags/${countryCode.toLowerCase()}.svg`;
-
-                // flagEl.classList.remove('hide');
-                // flagEl.src = flag;
                 break;
             } else {
-                // flagEl.src = '';
-                // flagEl.classList.add('hide');
             }
         }
     } catch (err) {
         console.log(err);
-        // flagEl.src = '';
-        // flagEl.classList.add('hide');
     }
-    console.log('flagUrl: ', flagUrl);
 
     let flagImg = '';
     if (flagUrl) {
@@ -107,44 +124,46 @@ function displayUser(user) {
 
     const profileHtml = `
         <div class="profile">
-            <div class="profile__photo">
-                <img src="${avatar_url}" alt="">
-            </div>
-            <div class="profile__description">
-                <div class="profile__name">
-                    <div class="profile__name-wrapper">
-                        <span class="profile__name--full">${name || ''}</span>
-                        ${flagImg}
-                    </div>
-                    <div class="profile__name-wrapper">
-                        <i class="las la-at" id="at-icon"></i>
-                        <a href='https://github.com/${login}' target='_blank' class="profile__name--username">${login}</a>
-                        <i class="las la-laptop" id="blog-icon"></i>
-                        <span class="profile__blog">
-                            <a href="${blogLink}" class="profile__blog-link" target="_blank">${blogCopy}</a>
-                        </span>
-                    </div>
+            <div class="profile__grid">
+                <div class="profile__photo">
+                    <img src="${avatar_url}" alt="">
                 </div>
-                <div class="profile__bio">${bio || ''}</div>
-                <ul class="profile__stats">
-                    <li class="profile__stats--followers">
-                        <span class="profile__stats--count">${followers.toLocaleString()}</span>
-                        <label class="profile__stats--label">Followers</label>
-                    </li>
-                    <li class="profile__stats--following">
-                        <span class="profile__stats--count">${following.toLocaleString()}</span>
-                        <label class="profile__stats--label">Following</label>
-                    </li>
-                    <li class="profile__stats--repos">
-                        <span class="profile__stats--count">${public_repos.toLocaleString()}</span>
-                        <label class="profile__stats--label">Repos</label>
-                    </li>
-                </ul>
+                <div class="profile__description">
+                    <div class="profile__name">
+                        <div class="profile__name-wrapper">
+                            <span class="profile__name--full">${name || ''}</span>
+                            ${flagImg}
+                        </div>
+                        <div class="profile__name-wrapper">
+                            <i class="las la-at" id="at-icon"></i>
+                            <a href='https://github.com/${login}' target='_blank' class="profile__name--username">${login}</a>
+                            <i class="las la-laptop" id="blog-icon"></i>
+                            <span class="profile__blog">
+                                <a href="${blogLink}" class="profile__blog-link" target="_blank">${blogName}</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="profile__bio">${bio || ''}</div>
+                    <ul class="profile__stats">
+                        <li class="profile__stat profile__stat--followers">
+                            <span class="profile__stat--count">${followers.toLocaleString()}</span>
+                            <label class="profile__stat--label">Followers</label>
+                        </li>
+                        <li class="profile__stat profile__stat--following">
+                            <span class="profile__stat--count">${following.toLocaleString()}</span>
+                            <label class="profile__stat--label">Following</label>
+                        </li>
+                        <li class="profile__stat profile__stat--repos active">
+                            <span class="profile__stat--count">${public_repos.toLocaleString()}</span>
+                            <label class="profile__stat--label">Repos</label>
+                        </li>
+                    </ul>
+                </div>
             </div>
+            <div class='profile__target' id='target'></div>
         </div>
     `;
 
-    
     main.innerHTML = profileHtml;
 }
 
@@ -159,7 +178,7 @@ formEl.addEventListener('submit', async (e) => {
         searchbar.blur();
     }
 })
-getUser('egoist');
+// getUser('egoist');
 
 // followersEl.addEventListener('click', () => {})
 

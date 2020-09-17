@@ -39,7 +39,7 @@ textarea {
 a {
 	text-decoration: none;
 	color: inherit;
-	transition: all 200ms ease;
+	transition: all 150ms ease;
 
 	&:hover {
 		opacity: 1;
@@ -99,11 +99,15 @@ body {
 	background: var(--purple-1);
 	border-radius: 18px;
 	padding: 3.6rem 5.8rem;
-	display: flex;
 	overflow: hidden;
 	// box-shadow: 0.5rem 0.5rem 1.5rem 1rem var(--purple-2-darker-opaque);
 	box-shadow: 20px 20px 70px var(--purple-2-shadow-dark),
 		-20px -20px 70px var(--purple-2-shadow-light);
+	transition: all 1000ms;
+
+	&__grid {
+		display: flex;
+	}
 
 	&__photo {
 		max-width: 22rem;
@@ -214,12 +218,15 @@ body {
 	&__stats {
 		display: flex;
 		align-items: center;
-		justify-content: space-between; 
+		justify-content: space-between;
+	}
 
-		> * {
-			display: block;
+	&__stat {
+		display: block;
+
+		&.active {
+			@extend .bubble;
 		}
-
 		&--label {
 			opacity: 0.7;
 		}
@@ -229,8 +236,41 @@ body {
 			opacity: 1;
 		}
 	}
+
+	&__target {
+		position: relative;
+		z-index: 10;
+		margin-top: 2em;
+
+		&:hover > .profile__target-element {
+			opacity: 0.6;
+		}
+		&:hover > .profile__target-element:hover {
+			opacity: 1;
+		}
+	}
+
+	&__target-element {
+		@extend .bubble;
+		padding: 0.3em 0.75em;
+		background: var(--purple-2);
+		font-size: 0.85em;
+		display: inline-block;
+		margin-right: 0.5rem;
+		margin-bottom: 0.5rem;
+
+		&:not(:first-of-type) {
+			// margin-left: 1em;
+		}
+	}
 }
 
 .hide {
 	display: none;
+}
+
+.bubble {
+	padding: 0.35em 0.75em;
+	background: var(--purple-2);
+	border-radius: 18px;
 }

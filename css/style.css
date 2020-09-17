@@ -30,7 +30,7 @@ textarea {
 a {
   text-decoration: none;
   color: inherit;
-  transition: all 200ms ease; }
+  transition: all 150ms ease; }
   a:hover {
     opacity: 1; }
 
@@ -74,9 +74,11 @@ body {
   background: var(--purple-1);
   border-radius: 18px;
   padding: 3.6rem 5.8rem;
-  display: flex;
   overflow: hidden;
-  box-shadow: 20px 20px 70px var(--purple-2-shadow-dark), -20px -20px 70px var(--purple-2-shadow-light); }
+  box-shadow: 20px 20px 70px var(--purple-2-shadow-dark), -20px -20px 70px var(--purple-2-shadow-light);
+  transition: all 1000ms; }
+  .profile__grid {
+    display: flex; }
   .profile__photo {
     max-width: 22rem;
     margin-right: 4.8rem; }
@@ -146,13 +148,33 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between; }
-    .profile__stats > * {
-      display: block; }
-    .profile__stats--label {
+  .profile__stat {
+    display: block; }
+    .profile__stat--label {
       opacity: 0.7; }
-    .profile__stats--count {
+    .profile__stat--count {
       font-weight: 700;
       opacity: 1; }
+  .profile__target {
+    position: relative;
+    z-index: 10;
+    margin-top: 2em; }
+    .profile__target:hover > .profile__target-element {
+      opacity: 0.6; }
+    .profile__target:hover > .profile__target-element:hover {
+      opacity: 1; }
+  .profile__target-element {
+    padding: 0.3em 0.75em;
+    background: var(--purple-2);
+    font-size: 0.85em;
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem; }
 
 .hide {
   display: none; }
+
+.bubble, .profile__stat.active, .profile__target-element {
+  padding: 0.35em 0.75em;
+  background: var(--purple-2);
+  border-radius: 18px; }
