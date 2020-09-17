@@ -29,7 +29,13 @@ textarea {
 
 a {
   text-decoration: none;
-  color: inherit; }
+  color: inherit;
+  transition: all 200ms ease; }
+  a:hover {
+    opacity: 1; }
+
+ul {
+  list-style: none; }
 
 body {
   font-size: 1.6rem;
@@ -56,15 +62,16 @@ body {
     border-radius: 18px;
     text-align: center;
     background: rgba(255, 255, 255, 0.04);
-    color: white;
-    transition: all 800ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+    color: white; }
     .header__searchbar:focus {
       background: rgba(255, 255, 255, 0.07); }
 
+.main {
+  max-width: 80rem;
+  width: 100%; }
+
 .profile {
   background: var(--purple-1);
-  max-width: 80rem;
-  width: 100%;
   border-radius: 18px;
   padding: 3.6rem 5.8rem;
   display: flex;
@@ -117,11 +124,12 @@ body {
     margin-left: 1em; }
   .profile__blog {
     font-size: 1.4rem;
-    opacity: 0.6;
     max-width: 40rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; }
+    .profile__blog-link {
+      opacity: 0.6; }
   .profile__bio {
     position: relative;
     padding-left: 1em; }
@@ -138,6 +146,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between; }
+    .profile__stats > * {
+      display: block; }
     .profile__stats--label {
       opacity: 0.7; }
     .profile__stats--count {

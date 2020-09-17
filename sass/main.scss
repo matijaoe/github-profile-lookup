@@ -39,6 +39,15 @@ textarea {
 a {
 	text-decoration: none;
 	color: inherit;
+	transition: all 200ms ease;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
+ul {
+	list-style: none;
 }
 
 body {
@@ -73,7 +82,7 @@ body {
 		background: rgba(255, 255, 255, 0.04);
 
 		color: white;
-		transition: all 800ms cubic-bezier(0.34, 1.56, 0.64, 1);
+		// transition: all 800ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
 		&:focus {
 			background: rgba(255, 255, 255, 0.07);
@@ -81,10 +90,13 @@ body {
 	}
 }
 
-.profile {
-	background: var(--purple-1);
+.main {
 	max-width: 80rem;
 	width: 100%;
+}
+
+.profile {
+	background: var(--purple-1);
 	border-radius: 18px;
 	padding: 3.6rem 5.8rem;
 	display: flex;
@@ -98,7 +110,7 @@ body {
 		margin-right: 4.8rem;
 
 		img {
-            // todo weierophinney
+			// todo weierophinney
 			display: block;
 			max-width: calc(100% - 2.2rem * 2);
 			border-radius: 50%;
@@ -173,11 +185,14 @@ body {
 
 	&__blog {
 		font-size: 1.4rem;
-		opacity: 0.6;
 		max-width: 40rem;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+
+		&-link {
+			opacity: 0.6;
+		}
 	}
 
 	&__bio {
@@ -199,7 +214,11 @@ body {
 	&__stats {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: space-between; 
+
+		> * {
+			display: block;
+		}
 
 		&--label {
 			opacity: 0.7;

@@ -1,20 +1,21 @@
 // DOM Elements
 const formEl = document.querySelector('form');
+const main = document.querySelector('#main');
 const searchbar = document.querySelector('.header__searchbar');
-const avatarEl = document.querySelector('.profile__photo img');
-const nameEl = document.querySelector('.profile__name--full');
-const usernameEl = document.querySelector('.profile__name--username');
-const flagEl = document.querySelector('.profile__flag');
-const blogEl = document.querySelector('.profile__blog-link');
-const blogIcon = document.querySelector('#blog-icon');
-const bioEl = document.querySelector('.profile__bio');
-const followersEl = document.querySelector('.profile__stats--followers .profile__stats--count')
-const followingEl = document.querySelector('.profile__stats--following .profile__stats--count')
-const reposEl = document.querySelector('.profile__stats--repos  .profile__stats--count')
+// const avatarEl = document.querySelector('.profile__photo img');
+// const nameEl = document.querySelector('.profile__name--full');
+// const usernameEl = document.querySelector('.profile__name--username');
+// const flagEl = document.querySelector('.profile__flag');
+// const blogEl = document.querySelector('.profile__blog-link');
+// const blogIcon = document.querySelector('#blog-icon');
+// const bioEl = document.querySelector('.profile__bio');
+// const followersEl = document.querySelector('.profile__stats--followers .profile__stats--count')
+// const followingEl = document.querySelector('.profile__stats--following .profile__stats--count')
+// const reposEl = document.querySelector('.profile__stats--repos  .profile__stats--count')
 
-async function getUser(user = 'mat2ja') {
+async function getUser(user = 'egoist') {
     const { data } = await axios.get(`https://api.github.com/users/${user}`)
-    displayUser(data)
+    displayUser(data);
 };
 
 function displayUser(user) {
@@ -52,35 +53,22 @@ function displayUser(user) {
         created_at,
         updated_at
     } = user;
-
-    avatarEl.src = avatar_url;
-    nameEl.innerText = name;
-    usernameEl.innerText = login;
-    bioEl.innerText = bio;
-    followersEl.innerText = followers;
-    followingEl.innerText = following;
-    reposEl.innerText = public_repos;
-
+    console.log(user);
 
     console.log('BLOG:', blog);
-
+    let blogCopy = blog;
+    let blogLink = blog;
     if (blog) {
-        if ((/http[s]?/).test(blog)) {
-            blogEl.href = blog;
-        } else {
-            blogEl.href = 'https://' + blog;
-        }
-        let regex = new RegExp('')
-        blogEl.innerText = blog.replace(/^https?\:\/\//i, "");
-        blogEl.classList.remove('hide');
-        blogIcon.classList.remove('hide');
+        if (!(/http[s]?/).test(blog)) {
+            blogLink = 'https://' + blog;
+        } 
+        blogCopy = blogCopy.replace(/^https?\:\/\//i, "");
+
     } else {
-        blogEl.classList.add('hide');
-        blogEl.href = '';
-        blogEl.innerText = 'blog';
-        blogIcon.classList.add('hide');
+
     }
 
+    let flagUrl = '';
     try {
         // TODO > agasking1337 Romania
         let locationArr = location.split(',');
@@ -95,32 +83,85 @@ function displayUser(user) {
                 // console.log('Found counry! > ', loc, isoCountries[loc]);
 
                 const countryCode = isoCountries[loc]
-                const flag = `https://hatscripts.github.io/circle-flags/flags/${countryCode.toLowerCase()}.svg`;
+                flagUrl = `https://hatscripts.github.io/circle-flags/flags/${countryCode.toLowerCase()}.svg`;
 
-                flagEl.classList.remove('hide');
-                flagEl.src = flag;
+                // flagEl.classList.remove('hide');
+                // flagEl.src = flag;
                 break;
             } else {
-                flagEl.src = '';
-                flagEl.classList.add('hide');
+                // flagEl.src = '';
+                // flagEl.classList.add('hide');
             }
         }
     } catch (err) {
         console.log(err);
-        flagEl.src = '';
-        flagEl.classList.add('hide');
+        // flagEl.src = '';
+        // flagEl.classList.add('hide');
     }
+    console.log('flagUrl: ', flagUrl);
+
+    let flagImg = '';
+    if (flagUrl) {
+        flagImg = `<img src="${flagUrl}" alt="" class="profile__flag">`
+    };
+
+    const profileHtml = `
+        <div class="profile">
+            <div class="profile__photo">
+                <img src="${avatar_url}" alt="">
+            </div>
+            <div class="profile__description">
+                <div class="profile__name">
+                    <div class="profile__name-wrapper">
+                        <span class="profile__name--full">${name || ''}</span>
+                        ${flagImg}
+                    </div>
+                    <div class="profile__name-wrapper">
+                        <i class="las la-at" id="at-icon"></i>
+                        <a href='https://github.com/${login}' target='_blank' class="profile__name--username">${login}</a>
+                        <i class="las la-laptop" id="blog-icon"></i>
+                        <span class="profile__blog">
+                            <a href="${blogLink}" class="profile__blog-link" target="_blank">${blogCopy}</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="profile__bio">${bio || ''}</div>
+                <ul class="profile__stats">
+                    <li class="profile__stats--followers">
+                        <span class="profile__stats--count">${followers.toLocaleString()}</span>
+                        <label class="profile__stats--label">Followers</label>
+                    </li>
+                    <li class="profile__stats--following">
+                        <span class="profile__stats--count">${following.toLocaleString()}</span>
+                        <label class="profile__stats--label">Following</label>
+                    </li>
+                    <li class="profile__stats--repos">
+                        <span class="profile__stats--count">${public_repos.toLocaleString()}</span>
+                        <label class="profile__stats--label">Repos</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `;
+
+    
+    main.innerHTML = profileHtml;
 }
+
 
 
 formEl.addEventListener('submit', async (e) => {
     e.preventDefault();
-    await getUser(searchbar.value.trim());
-    searchbar.value = '';
+    const user = searchbar.value.trim();
+    if (user) {
+        await getUser(user);
+        searchbar.value = '';
+        searchbar.blur();
+    }
 })
 getUser('egoist');
 
-// followersEl.addEventListener('click', listener)
+// followersEl.addEventListener('click', () => {})
 
 const isoCountries = {
     'Afghanistan': 'AF',
